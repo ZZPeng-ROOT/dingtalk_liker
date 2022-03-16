@@ -1,2 +1,2 @@
 #!/bin/sh
-rm -rf dingtalk-liker_*
+rm -rf bin/*

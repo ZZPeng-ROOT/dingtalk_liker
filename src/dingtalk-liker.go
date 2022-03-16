@@ -10,17 +10,19 @@ import (
 	"fmt"		//基本输入输出
 )
 
-var uuid string
+var uuid,version string
 var legitMode,debug bool
 var requestTimes,waitTime,likes,tmp,i int
 
 func initSettings(){
 /*
+	version: 版本号
 	legitMode: 合法模式开关
 	requestTimes: 请求计数器
 	waitTime: 等待时间
 	debug: DEBUG模式开关
 */
+	version = "v0.1"
 	legitMode = false
 	requestTimes = 10000
 	waitTime = 10
@@ -28,9 +30,26 @@ func initSettings(){
 	tmp=100
 }
 
+func versionChecker() bool{
+	resp, err := http.Get("https://ghproxy.com/https://raw.githubusercontent.com/ZZPeng-ROOT/dingtalk_liker/master/latest_version")
+	//处理http错误
+	if err != nil {
+		fmt.Println("http get error", err)
+		return false
+	}
+
+	//处理解析错误
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		fmt.Println("read error", err)
+		return false
+	}
+	return string(body) != version
+}
+
 func motd(){
 	fmt.Println("--------------------------------------------------------------------------------")
-	fmt.Println("dingtalk like helper v0.1 by ZZPeng                      https://blog.zzpeng.com")
+	fmt.Println("dingtalk like helper "+version+" by ZZPeng                      https://blog.zzpeng.com")
 	fmt.Println("                                                                                ")
 	fmt.Println("本项目开源地址: https://github.com/ZZPeng-ROOT/dingtalk_liker                    ")
 	fmt.Println("--------------------------------------------------------------------------------")
@@ -47,9 +66,13 @@ func getInfo(){
 }
 
 func main(){
-	motd()
 	initSettings()
-	
+	motd()
+	if versionChecker() {
+		fmt.Println("版本有更新，请前往Github下载最新版本!")
+		fmt.Println("https://github.com/ZZPeng-ROOT/dingtalk_liker/releases/latest")
+		return
+	}
 	fmt.Print("测试网络中...")
 	resp, err := http.Get("https://ipinfo.io")
 	if err != nil {
@@ -91,8 +114,10 @@ func main(){
 			fmt.Println("API error")
 			break
 		}
+
 		likes += tmp
 		fmt.Println("[Info] 第 "+strconv.Itoa(i)+" 次点赞,本次点赞: "+strconv.Itoa(tmp)+" ,累计点赞: "+strconv.Itoa(likes)+",下次点赞还需等待"+strconv.Itoa(waitTime)+"秒")
+		
 		//DEBUG模式下输出响应信息
 		if debug {
 			fmt.Println(string(body))
