@@ -6,7 +6,7 @@
 
 1. 下载,并运行
 
-2. 获取钉钉直播UUID
+2. 获取钉钉直播UUID [获取方法](https://blog.zzpeng.com/dingtalk-get-living-uuid/)
 
 3. 输入钉钉直播UUID
 
