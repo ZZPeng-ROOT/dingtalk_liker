@@ -29,26 +29,36 @@ func initSettings(){
 }
 
 func motd(){
-	fmt.Println("dingtalk like helper v0.1 by ZZPeng")
-	fmt.Println("https://blog.zzpeng.com")
+	fmt.Println("--------------------------------------------------------------------------------")
+	fmt.Println("dingtalk like helper v0.1 by ZZPeng                      https://blog.zzpeng.com")
+	fmt.Println("                                                                                ")
+	fmt.Println("本项目开源地址: https://github.com/ZZPeng-ROOT/dingtalk_liker                    ")
+	fmt.Println("--------------------------------------------------------------------------------")
 }
 
 func getInfo(){
 	fmt.Print("UUID:")
 	fmt.Scan(&uuid)
+	if len(uuid)!=36 {
+		fmt.Println("UUID错误!,UUID格式为XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXX")
+		fmt.Println("获取UUID教程 https://blog.zzpeng.com/dingtalk-get-living-uuid/")
+		getInfo()
+	}
 }
 
 func main(){
 	motd()
 	initSettings()
-	getInfo()
-	fmt.Print("Testing Network...")
+	
+	fmt.Print("测试网络中...")
 	resp, err := http.Get("https://ipinfo.io")
 	if err != nil {
-		fmt.Println("network error", err)
+		fmt.Println("网络错误", err)
 		return
 	}
-	fmt.Print("OK\nStarting thread...")
+	fmt.Println("OK")
+	getInfo()
+	fmt.Print("启动线程中...")
 	time.Sleep(2*time.Second)
 	fmt.Println("Working")
 	rand.Seed(time.Now().UnixNano())
