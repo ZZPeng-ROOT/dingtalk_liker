@@ -68,22 +68,17 @@ func getInfo(){
 func main(){
 	initSettings()
 	motd()
+	fmt.Print("检查更新中...")
 	if versionChecker() {
-		fmt.Println("版本有更新，请前往Github下载最新版本!")
+		fmt.Println("fail\n版本有更新，请前往Github下载最新版本!")
 		fmt.Println("https://github.com/ZZPeng-ROOT/dingtalk_liker/releases/latest")
-		return
-	}
-	fmt.Print("测试网络中...")
-	resp, err := http.Get("https://ipinfo.io")
-	if err != nil {
-		fmt.Println("网络错误", err)
 		return
 	}
 	fmt.Println("OK")
 	getInfo()
 	fmt.Print("启动线程中...")
 	time.Sleep(2*time.Second)
-	fmt.Println("Working")
+	fmt.Println("OK")
 	rand.Seed(time.Now().UnixNano())
 	fmt.Println("URL: https://lv.dingtalk.com/interaction/createLike?uuid="+uuid+"&count="+strconv.Itoa(tmp))
 	for {
